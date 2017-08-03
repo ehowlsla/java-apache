@@ -17,7 +17,7 @@ import java.io.IOException;
 public class BootpayApi {
 
     private final String BASE_URL = "https://api.bootpay.co.kr/";
-    private final String URL_CONFIRM = BASE_URL + "confirm";
+    private final String URL_CONFIRM = BASE_URL + "receipt";
     private final String URL_CANCEL = BASE_URL + "cancel";
 
     private String application_id;
