@@ -3,4 +3,6 @@
  */
 public class Hoo {
     public String name;
+    public String addr;
+
 }
