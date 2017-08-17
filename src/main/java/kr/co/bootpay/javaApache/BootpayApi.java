@@ -4,19 +4,27 @@ import com.google.gson.Gson;
 import kr.co.bootpay.javaApache.model.request.Cancel;
 import kr.co.bootpay.javaApache.model.request.Confirm;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by ehowlsla on 2017. 8. 3..
  */
 public class BootpayApi {
 
-    private final String BASE_URL = "https://api.bootpay.co.kr/";
+    private final String BASE_URL = "https://dev-api.bootpay.co.kr/";
     private final String URL_CONFIRM = BASE_URL + "receipt";
     private final String URL_CANCEL = BASE_URL + "cancel";
 
@@ -31,13 +39,17 @@ public class BootpayApi {
 
     public HttpResponse confirm(Confirm confirm) throws Exception {
         confirm = validConfirm(confirm);
+        List<NameValuePair> nameValuePairList = Arrays.asList(
+                new BasicNameValuePair("application_id", confirm.application_id),
+                new BasicNameValuePair("pk", confirm.pk),
+                new BasicNameValuePair("receipt_id", confirm.receipt_id));
 
         HttpClient client = HttpClientBuilder.create().build();
-        HttpPost post = getPost(URL_CONFIRM, new StringEntity(new Gson().toJson(confirm)));
-        return client.execute(post);
+        HttpGet get = getGet(URL_CONFIRM, nameValuePairList);
+        return client.execute(get);
     }
 
-    public HttpResponse cancel(Cancel cancel)throws Exception {
+    public HttpResponse cancel(Cancel cancel) throws Exception {
         cancel = validCancel(cancel);
 
         HttpClient client = HttpClientBuilder.create().build();
@@ -45,11 +57,17 @@ public class BootpayApi {
         return client.execute(post);
     }
 
+    private HttpGet getGet(String url, List<NameValuePair> nameValuePairList) throws Exception {
+        HttpGet get = new HttpGet(url);
+        URI uri = new URIBuilder(get.getURI()).addParameters(nameValuePairList).build();
+        get.setURI(uri);
+        return get;
+    }
+
     private HttpPost getPost(String url, StringEntity entity) {
         HttpPost post = new HttpPost(url);
         post.setHeader("Accept", "application/json");
         post.setHeader("Content-Type", "application/json");
-
         post.setEntity(entity);
         return post;
     }
