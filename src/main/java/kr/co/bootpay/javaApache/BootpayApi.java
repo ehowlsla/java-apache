@@ -41,11 +41,10 @@ public class BootpayApi {
         confirm = validConfirm(confirm);
         List<NameValuePair> nameValuePairList = Arrays.asList(
                 new BasicNameValuePair("application_id", confirm.application_id),
-                new BasicNameValuePair("pk", confirm.pk),
-                new BasicNameValuePair("receipt_id", confirm.receipt_id));
+                new BasicNameValuePair("pk", confirm.pk));
 
         HttpClient client = HttpClientBuilder.create().build();
-        HttpGet get = getGet(URL_CONFIRM, nameValuePairList);
+        HttpGet get = getGet(URL_CONFIRM + "/" + confirm.receipt_id, nameValuePairList);
         return client.execute(get);
     }
 

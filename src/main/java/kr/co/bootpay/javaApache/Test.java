@@ -2,6 +2,7 @@ package kr.co.bootpay.javaApache;
 
 import kr.co.bootpay.javaApache.model.request.Cancel;
 import kr.co.bootpay.javaApache.model.request.Confirm;
+import org.apache.http.HttpResponse;
 
 /**
  * Created by ehowlsla on 2017. 8. 17..
